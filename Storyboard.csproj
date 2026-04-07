@@ -12,9 +12,9 @@
     <ApplicationManifest>App\app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <!-- 版本号：发布脚本会自动更新此值 -->
-    <Version>1.1.12</Version>
-    <AssemblyVersion>1.1.12</AssemblyVersion>
-    <FileVersion>1.1.12</FileVersion>
+    <Version>1.2.0</Version>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
+    <FileVersion>1.2.0</FileVersion>
     <!-- 应用程序图标配置 -->
     <ApplicationIcon>App\Assets\icon.ico</ApplicationIcon>
     <!-- 发布者信息 -->
