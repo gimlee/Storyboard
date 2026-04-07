@@ -117,7 +117,7 @@ public class QwenServiceProvider : BaseAIServiceProvider
 
         try
         {
-            var model = string.IsNullOrWhiteSpace(Config.DefaultModels.Text) ? "qwen-max" : Config.DefaultModels.Text;
+            var model = ResolveValidationModel();
             var request = new AIChatRequest
             {
                 Model = model,
@@ -134,6 +134,26 @@ public class QwenServiceProvider : BaseAIServiceProvider
             Logger.LogError(ex, "Qwen configuration validation failed.");
             return false;
         }
+    }
+
+    private string ResolveValidationModel()
+    {
+        var configuredModel = Config.DefaultModels.Text?.Trim();
+        if (string.IsNullOrWhiteSpace(configuredModel))
+        {
+            return "qwen-max";
+        }
+
+        if (configuredModel.Contains("qwen", StringComparison.OrdinalIgnoreCase) ||
+            configuredModel.Contains("qwq", StringComparison.OrdinalIgnoreCase))
+        {
+            return configuredModel;
+        }
+
+        Logger.LogWarning(
+            "Qwen validation model {Model} does not look like a Qwen model. Falling back to qwen-max.",
+            configuredModel);
+        return "qwen-max";
     }
 
     private void EnsureConfigured()

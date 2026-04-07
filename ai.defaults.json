@@ -5,9 +5,9 @@
       "TimeoutSeconds": 120,
       "Enabled": false,
       "DefaultModels": {
-        "Text": "doubao-seed-1-6-251015",
-        "Image": "doubao-seedream-4-5-251128",
-        "Video": "doubao-seedance-1-0-lite-i2v-250428",
+        "Text": "qwen-max",
+        "Image": "qwen-image-max",
+        "Video": "wan2.6-i2v",
         "Tts": "qwen-tts"
       }
     },
