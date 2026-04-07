@@ -117,7 +117,7 @@ public class QwenServiceProvider : BaseAIServiceProvider
 
         try
         {
-            var model = ResolveValidationModel();
+            var model = ResolveValidationModel(GetPreferredValidationModel());
             var request = new AIChatRequest
             {
                 Model = model,
@@ -136,9 +136,19 @@ public class QwenServiceProvider : BaseAIServiceProvider
         }
     }
 
-    private string ResolveValidationModel()
+    private string GetPreferredValidationModel()
     {
-        var configuredModel = Config.DefaultModels.Text?.Trim();
+        var defaults = _configMonitor.CurrentValue.Defaults.Text;
+        if (defaults.Provider == ProviderType && !string.IsNullOrWhiteSpace(defaults.Model))
+        {
+            return defaults.Model.Trim();
+        }
+
+        return Config.DefaultModels.Text?.Trim() ?? string.Empty;
+    }
+
+    private string ResolveValidationModel(string configuredModel)
+    {
         if (string.IsNullOrWhiteSpace(configuredModel))
         {
             return "qwen-max";

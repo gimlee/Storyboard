@@ -142,7 +142,7 @@ public class VolcengineServiceProvider : BaseAIServiceProvider
 
         try
         {
-            var model = string.IsNullOrWhiteSpace(Config.DefaultModels.Text) ? "doubao-pro-4k" : Config.DefaultModels.Text;
+            var model = ResolveValidationModel();
             var request = new AIChatRequest
             {
                 Model = model,
@@ -159,6 +159,19 @@ public class VolcengineServiceProvider : BaseAIServiceProvider
             Logger.LogError(ex, "Volcengine configuration validation failed.");
             return false;
         }
+    }
+
+    private string ResolveValidationModel()
+    {
+        var defaults = _configMonitor.CurrentValue.Defaults.Text;
+        if (defaults.Provider == ProviderType && !string.IsNullOrWhiteSpace(defaults.Model))
+        {
+            return defaults.Model.Trim();
+        }
+
+        return string.IsNullOrWhiteSpace(Config.DefaultModels.Text)
+            ? "doubao-pro-4k"
+            : Config.DefaultModels.Text.Trim();
     }
 
     private void EnsureConfigured()
