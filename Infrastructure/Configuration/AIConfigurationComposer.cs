@@ -354,12 +354,16 @@ public class AIConfigurationComposer
         var qwenConfig = ComposeProviderConfig("Qwen", userOverrides);
         var volcengineConfig = ComposeProviderConfig("Volcengine", userOverrides);
         var newApiConfig = ComposeProviderConfig("NewApi", userOverrides);
+        var klingConfig = ComposeProviderConfig("Kling", userOverrides);
+        var deepSeekConfig = ComposeProviderConfig("DeepSeek", userOverrides);
 
         config.Providers = new AIProvidersConfiguration
         {
             Qwen = qwenConfig,
             Volcengine = volcengineConfig,
-            NewApi = newApiConfig
+            NewApi = newApiConfig,
+            Kling = klingConfig,
+            DeepSeek = deepSeekConfig
         };
 
         // 2. 设置 Defaults（Text/Image/Video 默认 Provider）
@@ -535,6 +539,17 @@ public class AIConfigurationComposer
             };
         }
 
+        if (_defaults?.Image?.Providers.TryGetValue("Kling", out var klingImgDefaults) == true)
+        {
+            config.Kling = new KlingImageConfig
+            {
+                AspectRatio = string.IsNullOrWhiteSpace(klingImgDefaults.AspectRatio) ? "16:9" : klingImgDefaults.AspectRatio!,
+                ResponseFormat = string.IsNullOrWhiteSpace(klingImgDefaults.ResponseFormat) ? "url" : klingImgDefaults.ResponseFormat,
+                Images = klingImgDefaults.Images <= 0 ? 1 : klingImgDefaults.Images,
+                NegativePrompt = klingImgDefaults.NegativePrompt
+            };
+        }
+
         return config;
     }
 
@@ -583,6 +598,18 @@ public class AIConfigurationComposer
                 Watermark = newApiDefaults.Watermark,
                 ReturnLastFrame = newApiDefaults.ReturnLastFrame,
                 ProviderHint = newApiDefaults.ProviderHint
+            };
+        }
+
+        if (_defaults?.Video?.Providers.TryGetValue("Kling", out var klingVidDefaults) == true)
+        {
+            config.Kling = new KlingVideoConfig
+            {
+                AspectRatio = string.IsNullOrWhiteSpace(klingVidDefaults.AspectRatio) ? "16:9" : klingVidDefaults.AspectRatio!,
+                DurationSeconds = klingVidDefaults.DurationSeconds <= 0 ? 5 : klingVidDefaults.DurationSeconds,
+                Mode = string.IsNullOrWhiteSpace(klingVidDefaults.Mode) ? "std" : klingVidDefaults.Mode!,
+                Watermark = klingVidDefaults.Watermark,
+                NegativePrompt = klingVidDefaults.NegativePrompt
             };
         }
 
@@ -701,6 +728,8 @@ public class AIConfigurationComposer
             "Qwen" => AIProviderType.Qwen,
             "Volcengine" => AIProviderType.Volcengine,
             "NewApi" => AIProviderType.NewApi,
+            "Kling" => AIProviderType.Kling,
+            "DeepSeek" => AIProviderType.DeepSeek,
             _ => AIProviderType.Qwen // 默认值
         };
     }
@@ -711,6 +740,7 @@ public class AIConfigurationComposer
             AIProviderType.Qwen => ImageProviderType.Qwen,
             AIProviderType.Volcengine => ImageProviderType.Volcengine,
             AIProviderType.NewApi => ImageProviderType.NewApi,
+            AIProviderType.Kling => ImageProviderType.Kling,
             _ => ImageProviderType.Volcengine
         };
     }
@@ -722,6 +752,7 @@ public class AIConfigurationComposer
             AIProviderType.Qwen => VideoProviderType.Qwen,
             AIProviderType.Volcengine => VideoProviderType.Volcengine,
             AIProviderType.NewApi => VideoProviderType.NewApi,
+            AIProviderType.Kling => VideoProviderType.Kling,
             _ => VideoProviderType.Volcengine
         };
     }
@@ -733,6 +764,7 @@ public class AIConfigurationComposer
             AIProviderType.Qwen => TtsProviderType.Qwen,
             AIProviderType.Volcengine => TtsProviderType.Volcengine,
             AIProviderType.NewApi => TtsProviderType.NewApi,
+            // Kling 暂不提供独立 TTS，回落到 NewApi
             _ => TtsProviderType.NewApi
         };
     }

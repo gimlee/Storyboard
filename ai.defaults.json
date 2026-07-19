@@ -32,6 +32,23 @@
             "Video": "doubao-seedance-1-0-lite-i2v-250428",
             "Tts": "tts-1"
         }
+    },
+    "Kling": {
+      "Endpoint": "https://api-beijing.klingai.com",
+      "TimeoutSeconds": 180,
+      "Enabled": false,
+      "DefaultModels": {
+        "Image": "kling-v3",
+        "Video": "kling-v3"
+      }
+    },
+    "DeepSeek": {
+      "Endpoint": "https://api.deepseek.com",
+      "TimeoutSeconds": 120,
+      "Enabled": false,
+      "DefaultModels": {
+        "Text": "deepseek-chat"
+      }
     }
   },
   "Image": {
@@ -57,6 +74,12 @@
         "Stream": false,
         "Images": 1,
         "ProviderHint": ""
+      },
+      "Kling": {
+        "AspectRatio": "16:9",
+        "ResponseFormat": "url",
+        "Images": 1,
+        "NegativePrompt": ""
       }
     }
   },
@@ -92,6 +115,13 @@
         "Watermark": false,
         "ReturnLastFrame": false,
         "ProviderHint": ""
+      },
+      "Kling": {
+        "AspectRatio": "16:9",
+        "DurationSeconds": 5,
+        "Mode": "std",
+        "Watermark": false,
+        "NegativePrompt": ""
       }
     }
   },

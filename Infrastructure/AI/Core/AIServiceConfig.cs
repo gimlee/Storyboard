@@ -33,6 +33,8 @@ public sealed class AIProvidersConfiguration
     public AIProviderConfiguration Qwen { get; set; } = new();
     public AIProviderConfiguration Volcengine { get; set; } = new();
     public AIProviderConfiguration NewApi { get; set; } = new();
+    public AIProviderConfiguration Kling { get; set; } = new();
+    public AIProviderConfiguration DeepSeek { get; set; } = new();
 }
 
 public sealed class AIServiceDefaultSelection
@@ -86,6 +88,7 @@ public class ImageServicesConfiguration
     public QwenImageConfig Qwen { get; set; } = new();
     public VolcengineImageConfig Volcengine { get; set; } = new();
     public NewApiImageConfig NewApi { get; set; } = new();
+    public KlingImageConfig Kling { get; set; } = new();
 }
 
 public sealed class VolcengineVideoConfig
@@ -121,6 +124,7 @@ public class VideoServicesConfiguration
     public QwenVideoConfig Qwen { get; set; } = new();
     public VolcengineVideoConfig Volcengine { get; set; } = new();
     public NewApiVideoConfig NewApi { get; set; } = new();
+    public KlingVideoConfig Kling { get; set; } = new();
 }
 
 public sealed class NewApiImageConfig
@@ -141,6 +145,34 @@ public sealed class NewApiVideoConfig
     public bool Watermark { get; set; }
     public bool ReturnLastFrame { get; set; }
     public string? ProviderHint { get; set; }
+}
+
+/// <summary>
+/// Kling 图像生成配置。
+/// </summary>
+public sealed class KlingImageConfig
+{
+    /// <summary>比例，如 16:9 / 1:1 / 9:16 / 4:3 / 3:2 / 2:3</summary>
+    public string AspectRatio { get; set; } = "16:9";
+    /// <summary>响应格式：url 或 b64_json</summary>
+    public string ResponseFormat { get; set; } = "url";
+    public int Images { get; set; } = 1;
+    public string? NegativePrompt { get; set; }
+}
+
+/// <summary>
+/// Kling 视频生成配置。
+/// </summary>
+public sealed class KlingVideoConfig
+{
+    /// <summary>比例：16:9 / 9:16 / 1:1</summary>
+    public string AspectRatio { get; set; } = "16:9";
+    /// <summary>时长（秒），Kling 3.0 Turbo 支持 5 / 10 秒</summary>
+    public int DurationSeconds { get; set; } = 5;
+    /// <summary>模式：std / pro</summary>
+    public string Mode { get; set; } = "std";
+    public bool Watermark { get; set; }
+    public string? NegativePrompt { get; set; }
 }
 
 public sealed class NewApiTtsConfig

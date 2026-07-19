@@ -10,7 +10,11 @@ public enum AIProviderType
     /// <summary>Volcengine</summary>
     Volcengine,
     /// <summary>New API gateway</summary>
-    NewApi
+    NewApi,
+    /// <summary>Kling (image + video)</summary>
+    Kling,
+    /// <summary>DeepSeek (text)</summary>
+    DeepSeek
 }
 
 [Flags]

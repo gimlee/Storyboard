@@ -15,6 +15,16 @@
       "Supports": ["Text", "Image", "Video", "Audio", "Embeddings", "Rerank", "Realtime"],
       "RequiredFields": ["ApiKey", "Endpoint"],
       "OptionalFields": ["Enabled", "TimeoutSeconds", "RoutingHints"]
+    },
+    "Kling": {
+      "Supports": ["Image", "Video"],
+      "RequiredFields": ["ApiKey", "Endpoint"],
+      "OptionalFields": ["Enabled", "TimeoutSeconds"]
+    },
+    "DeepSeek": {
+      "Supports": ["Text"],
+      "RequiredFields": ["ApiKey", "Endpoint"],
+      "OptionalFields": ["Enabled", "TimeoutSeconds"]
     }
   }
 }

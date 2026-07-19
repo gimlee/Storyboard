@@ -284,6 +284,8 @@ public class AIServiceManager
                 AIProviderType.Qwen => config.Providers.Qwen.Enabled,
                 AIProviderType.Volcengine => config.Providers.Volcengine.Enabled,
                 AIProviderType.NewApi => config.Providers.NewApi.Enabled,
+                AIProviderType.Kling => config.Providers.Kling.Enabled,
+                AIProviderType.DeepSeek => config.Providers.DeepSeek.Enabled,
                 _ => false
             };
 
@@ -344,6 +346,8 @@ public class AIServiceManager
             AIProviderType.Qwen => config.Providers.Qwen,
             AIProviderType.Volcengine => config.Providers.Volcengine,
             AIProviderType.NewApi => config.Providers.NewApi,
+            AIProviderType.Kling => config.Providers.Kling,
+            AIProviderType.DeepSeek => config.Providers.DeepSeek,
             _ => null
         };
 

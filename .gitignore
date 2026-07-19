@@ -15,6 +15,9 @@ obj/
 # Visual Studio Code
 .vscode/
 
+# ZCode
+.zcode/
+
 # NuGet
 *.nupkg
 # NuGet Packages folder

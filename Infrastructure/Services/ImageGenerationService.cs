@@ -250,7 +250,22 @@ public sealed class ImageGenerationService : IImageGenerationService
             ImageProviderType.Qwen => ResolveSize(config.Qwen),
             ImageProviderType.Volcengine => ResolveSize(config.Volcengine),
             ImageProviderType.NewApi => ResolveSize(config.NewApi),
+            ImageProviderType.Kling => ResolveKlingSize(config.Kling),
             _ => ResolveSize(config.Volcengine)
+        };
+    }
+
+    private static (int Width, int Height) ResolveKlingSize(KlingImageConfig config)
+    {
+        // Kling 用 aspect_ratio 而非固定尺寸，给一个合理默认分辨率
+        return config.AspectRatio?.Trim() switch
+        {
+            "1:1" => (1024, 1024),
+            "9:16" => (720, 1280),
+            "4:3" => (1024, 768),
+            "3:2" => (1080, 720),
+            "2:3" => (720, 1080),
+            _ => (1280, 720) // 16:9 默认
         };
     }
 
@@ -318,6 +333,7 @@ public sealed class ImageGenerationService : IImageGenerationService
             ImageProviderType.Qwen => config.Qwen.Size,
             ImageProviderType.Volcengine => config.Volcengine.Size,
             ImageProviderType.NewApi => config.NewApi.Size,
+            ImageProviderType.Kling => config.Kling.AspectRatio,
             _ => config.Volcengine.Size
         };
     }
@@ -355,11 +371,19 @@ public sealed class ImageGenerationService : IImageGenerationService
             return config.Defaults.Image.Model;
         }
 
+        if (config.Defaults.Image.Provider == AIProviderType.Kling &&
+            provider.ProviderType == ImageProviderType.Kling &&
+            !string.IsNullOrWhiteSpace(config.Defaults.Image.Model))
+        {
+            return config.Defaults.Image.Model;
+        }
+
         var providerConfig = provider.ProviderType switch
         {
             ImageProviderType.Qwen => config.Providers.Qwen,
             ImageProviderType.Volcengine => config.Providers.Volcengine,
             ImageProviderType.NewApi => config.Providers.NewApi,
+            ImageProviderType.Kling => config.Providers.Kling,
             _ => null
         };
 

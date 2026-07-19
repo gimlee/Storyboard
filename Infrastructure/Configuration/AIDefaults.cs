@@ -41,6 +41,10 @@ public class ImageProviderDefaults
     public int Images { get; set; } = 1;
     public bool PromptExtend { get; set; } = true;
     public string? ProviderHint { get; set; } = string.Empty;
+    /// <summary>Kling 比例（如 16:9）。其他 provider 忽略。</summary>
+    public string? AspectRatio { get; set; }
+    /// <summary>Kling 反向提示词。其他 provider 忽略。</summary>
+    public string? NegativePrompt { get; set; }
 }
 
 /// <summary>
@@ -65,6 +69,12 @@ public class VideoProviderDefaults
     public bool PromptExtend { get; set; } = true;
     public string ShotType { get; set; } = "single";
     public string? ProviderHint { get; set; } = string.Empty;
+    /// <summary>Kling 比例（16:9 / 9:16 / 1:1）。其他 provider 忽略。</summary>
+    public string? AspectRatio { get; set; }
+    /// <summary>Kling 模式（std / pro）。其他 provider 忽略。</summary>
+    public string? Mode { get; set; } = "std";
+    /// <summary>Kling 反向提示词。其他 provider 忽略。</summary>
+    public string? NegativePrompt { get; set; }
 }
 
 /// <summary>

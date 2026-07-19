@@ -93,9 +93,21 @@ public partial class ApiKeyViewModel : ObservableObject
     [ObservableProperty] private string _newApiEndpoint = string.Empty;
     [ObservableProperty] private int _newApiTimeoutSeconds = 120;
 
+    [ObservableProperty] private bool _klingEnabled;
+    [ObservableProperty] private string _klingApiKey = string.Empty;
+    [ObservableProperty] private string _klingEndpoint = string.Empty;
+    [ObservableProperty] private int _klingTimeoutSeconds = 180;
+
+    [ObservableProperty] private bool _deepSeekEnabled;
+    [ObservableProperty] private string _deepSeekApiKey = string.Empty;
+    [ObservableProperty] private string _deepSeekEndpoint = string.Empty;
+    [ObservableProperty] private int _deepSeekTimeoutSeconds = 120;
+
     public bool IsQwenSelected => SelectedProvider == AIProviderType.Qwen;
     public bool IsVolcengineSelected => SelectedProvider == AIProviderType.Volcengine;
     public bool IsNewApiSelected => SelectedProvider == AIProviderType.NewApi;
+    public bool IsKlingSelected => SelectedProvider == AIProviderType.Kling;
+    public bool IsDeepSeekSelected => SelectedProvider == AIProviderType.DeepSeek;
 
     private void LoadFromFile()
     {
@@ -131,6 +143,18 @@ public partial class ApiKeyViewModel : ObservableObject
         NewApiApiKey = newApi.ApiKey;
         NewApiEndpoint = newApi.Endpoint;
         NewApiTimeoutSeconds = newApi.TimeoutSeconds;
+
+        var kling = cfg.Providers.Kling;
+        KlingEnabled = kling.Enabled;
+        KlingApiKey = kling.ApiKey;
+        KlingEndpoint = kling.Endpoint;
+        KlingTimeoutSeconds = kling.TimeoutSeconds;
+
+        var deepSeek = cfg.Providers.DeepSeek;
+        DeepSeekEnabled = deepSeek.Enabled;
+        DeepSeekApiKey = deepSeek.ApiKey;
+        DeepSeekEndpoint = deepSeek.Endpoint;
+        DeepSeekTimeoutSeconds = deepSeek.TimeoutSeconds;
     }
 
     partial void OnSelectedProviderChanged(AIProviderType value)
@@ -138,6 +162,8 @@ public partial class ApiKeyViewModel : ObservableObject
         OnPropertyChanged(nameof(IsQwenSelected));
         OnPropertyChanged(nameof(IsVolcengineSelected));
         OnPropertyChanged(nameof(IsNewApiSelected));
+        OnPropertyChanged(nameof(IsKlingSelected));
+        OnPropertyChanged(nameof(IsDeepSeekSelected));
     }
 
     partial void OnDefaultTextProviderChanged(AIProviderType value)
@@ -168,6 +194,8 @@ public partial class ApiKeyViewModel : ObservableObject
             AIProviderType.Qwen => cfg.Providers.Qwen,
             AIProviderType.Volcengine => cfg.Providers.Volcengine,
             AIProviderType.NewApi => cfg.Providers.NewApi,
+            AIProviderType.Kling => cfg.Providers.Kling,
+            AIProviderType.DeepSeek => cfg.Providers.DeepSeek,
             _ => cfg.Providers.Qwen
         };
 
@@ -225,9 +253,23 @@ public partial class ApiKeyViewModel : ObservableObject
                 NewApiEndpoint,
                 NewApiTimeoutSeconds);
 
+            var klingConfig = BuildProviderUserConfig(
+                KlingApiKey,
+                KlingEnabled,
+                KlingEndpoint,
+                KlingTimeoutSeconds);
+
+            var deepSeekConfig = BuildProviderUserConfig(
+                DeepSeekApiKey,
+                DeepSeekEnabled,
+                DeepSeekEndpoint,
+                DeepSeekTimeoutSeconds);
+
             _configComposer.SaveUserConfiguration("Qwen", qwenConfig);
             _configComposer.SaveUserConfiguration("Volcengine", volcConfig);
             _configComposer.SaveUserConfiguration("NewApi", newApiConfig);
+            _configComposer.SaveUserConfiguration("Kling", klingConfig);
+            _configComposer.SaveUserConfiguration("DeepSeek", deepSeekConfig);
 
             var userSettings = _userSettingsStore.Load();
             userSettings.DefaultProviders.TextProvider = DefaultTextProvider.ToString();

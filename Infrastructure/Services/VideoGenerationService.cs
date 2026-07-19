@@ -151,11 +151,19 @@ public sealed class VideoGenerationService : IVideoGenerationService
             return config.Defaults.Video.Model;
         }
 
+        if (config.Defaults.Video.Provider == AIProviderType.Kling &&
+            provider.ProviderType == VideoProviderType.Kling &&
+            !string.IsNullOrWhiteSpace(config.Defaults.Video.Model))
+        {
+            return config.Defaults.Video.Model;
+        }
+
         var providerConfig = provider.ProviderType switch
         {
             VideoProviderType.Qwen => config.Providers.Qwen,
             VideoProviderType.Volcengine => config.Providers.Volcengine,
             VideoProviderType.NewApi => config.Providers.NewApi,
+            VideoProviderType.Kling => config.Providers.Kling,
             _ => null
         };
 
@@ -172,6 +180,8 @@ public sealed class VideoGenerationService : IVideoGenerationService
             VideoProviderType.Qwen => config.Qwen.Resolution,
             VideoProviderType.Volcengine => config.Volcengine.Resolution,
             VideoProviderType.NewApi => config.NewApi.Resolution,
+            // Kling 用 aspect_ratio 而非分辨率字符串
+            VideoProviderType.Kling => config.Kling.AspectRatio,
             _ => config.Volcengine.Resolution
         };
     }
